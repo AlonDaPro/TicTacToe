@@ -58,9 +58,8 @@ A highly scalable, real-time multiplayer Tic-Tac-Toe game built with Node.js, fe
 │  ⚖️  INTELLIGENT LOAD BALANCER                            │
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │ Priority System:                                    │   │
-│  │ 1. Available games from different servers           │   │
-│  │ 2. Local games missing second player               │   │
-│  │ 3. Server with fewest connected clients            │   │
+│  │ 1. Available games from different servers           │   │          │   │
+│  │ 2. Server with fewest connected clients             │   │
 │  └─────────────────────────────────────────────────────┘   │
 │                                                             │
 ├─────────────────────────────────────────────────────────────┤
