@@ -212,6 +212,17 @@ telnet localhost 3002
 # Should see: "Federation active with X peers"
 ```
 
+
+### AI Development Process
+- **Planning & Architecture**:
+Before implementation, I created a detailed "Plan Mode" — outlining the overall architecture, data flow, and system structure. This plan was refined and verified with AI feedback to ensure design consistency.
+
+- **AI Coding Assistance**:
+Development was supported by Cursor and Cline agents for iterative coding, refactoring, and maintaining consistent patterns across files.
+Additionally, GitHub Copilot was used primarily for code autocompletion and inline suggestions.
+
+- **Idea Validation**:
+Throughout development, I used GPT to confirm design decisions, validate assumptions, and clarify specific implementation details before finalizing changes.
 ---
 
 **🎮 Ready to scale? Your Tic-Tac-Toe federation supports limitless horizontal scaling!**
