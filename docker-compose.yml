@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # Primary server (Server1) - port 3001
+  tictoe-server-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["npm", "run", "server", "3001"]
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - tictoe-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('ws').connect('ws://localhost:3001', () => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  # Secondary server (Server2) - port 3002
+  tictoe-server-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["npm", "run", "server", "3002"]
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - tictoe-network
+    restart: unless-stopped
+    depends_on:
+      tictoe-server-1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('ws').connect('ws://localhost:3002', () => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  # Additional server (Server3) - port 3003
+  tictoe-server-3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["npm", "run", "server", "3003"]
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - tictoe-network
+    restart: unless-stopped
+    depends_on:
+      tictoe-server-2:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('ws').connect('ws://localhost:3003', () => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    profiles:
+      - extra-servers
+
+  # Additional server (Server4) - port 3004
+  tictoe-server-4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["npm", "run", "server", "3004"]
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - tictoe-network
+    restart: unless-stopped
+    depends_on:
+      tictoe-server-3:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('ws').connect('ws://localhost:3004', () => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    profiles:
+      - extra-servers
+
+networks:
+  tictoe-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Usage:
+# docker-compose up                          # Start servers 1 & 2
+# docker-compose --profile extra-servers up  # Start all 4 servers
+# docker-compose down                        # Stop all servers
